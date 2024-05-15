@@ -114,7 +114,8 @@ async def persist(keys: Keys, data: BitcoinSentiments):
 
 async def get_hourly_average(ts_key: str, top_of_the_hour: int):
     response = await redis.execute_command(
-        'TS.RANGE', ts_key, top_of_the_hour, '+',
+        # 'TS.RANGE', ts_key, top_of_the_hour, '+',
+        'TS.RANGE', ts_key, '-', '+', # The api is not longer working, so just retrive all to avoid getting empty list
         'AGGREGATION', 'avg', HOURLY_BUCKET,
     )
     # Returns a list of the structure [timestamp, average].

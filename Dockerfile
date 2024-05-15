@@ -2,15 +2,20 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
 WORKDIR /app
 
-# Install Poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-        ln -s /opt/poetry/bin/poetry && \
-            poetry config virtualenvs.create false
+# # Install Poetry
+# RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
+#     cd /usr/local/bin && \
+#         ln -s /opt/poetry/bin/poetry && \
+#             poetry config virtualenvs.create false
 
-# Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* /app/
+# # Copy poetry.lock* in case it doesn't exist in the repo
+# COPY ./pyproject.toml ./poetry.lock* /app/
 
-RUN bash -c "poetry install --no-root"
+# RUN bash -c "poetry install --no-root"
+
+COPY requirements.txt ./
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./app /app
